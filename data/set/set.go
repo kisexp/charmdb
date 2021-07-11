@@ -143,6 +143,16 @@ func (this *Set) SDiff(keys ...string) (val [][]byte) {
 	return
 }
 
+func (this *Set) SKeyExists(key string) (ok bool) {
+	return this.exist(key)
+}
+
+func (this *Set) SClear(key string) {
+	if this.SKeyExists(key) {
+		delete(this.record, key)
+	}
+}
+
 // exist key对应的集合是否存在
 func (this *Set) exist(key string) bool {
 	_, exist := this.record[key]

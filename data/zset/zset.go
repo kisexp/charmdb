@@ -269,6 +269,16 @@ func (this *SortedSet) ZRevScoreRange(key string, max, min float64) (val []inter
 	return
 }
 
+func (this *SortedSet) ZKeyExists(key string) bool {
+	return this.exist(key)
+}
+
+func (this *SortedSet) ZClear(key string) {
+	if this.ZKeyExists(key) {
+		delete(this.record, key)
+	}
+}
+
 func (this *SortedSet) getByRank(key string, rank int64, reverse bool) (string, float64) {
 	skl := this.record[key].skl
 	if rank < 0 || rank > skl.length {

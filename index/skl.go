@@ -101,7 +101,7 @@ func (this *SkipList) Get(key []byte) *Element {
 	var next *Element
 
 	for i := this.maxLevel - 1; i >= 0; i-- {
-		next = prev.next[1]
+		next = prev.next[i]
 		for next != nil && bytes.Compare(key, next.key) > 0 {
 			prev = &next.Node
 			next = next.next[i]

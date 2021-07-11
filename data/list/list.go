@@ -248,6 +248,11 @@ func (this *List) LLen(key string) int {
 	return length
 }
 
+func (this *List) LClear(key string)  {
+	delete(this.record, key)
+	delete(this.values, key)
+}
+
 func (this *List) LKeyExists(key string) (ok bool) {
 	_, ok = this.record[key]
 	return

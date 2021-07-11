@@ -79,6 +79,9 @@ func (this *Hash) HDel(key, field string) int {
 	return 0
 }
 
+func (this *Hash) HKeyExists(key string) bool  {
+	return this.exist(key)
+}
 
 // HExists 检查给定域 field 是否存在于key对应的哈希表中
 func (this *Hash) HExists(key, field string) int {
@@ -92,6 +95,7 @@ func (this *Hash) HExists(key, field string) int {
 		return 0
 	}
 }
+
 
 // HLen 返回哈希表 key 中域的数量
 func (this *Hash) HLen(key string) int {
@@ -122,4 +126,11 @@ func (this *Hash) HVals(key string) (val [][]byte) {
 		val = append(val, v)
 	}
 	return
+}
+
+func (this *Hash) HClear(key string) {
+	if !this.exist(key) {
+		return
+	}
+	delete(this.record, key)
 }

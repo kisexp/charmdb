@@ -4,6 +4,7 @@ import (
 	"encoding/binary"
 	"errors"
 	"hash/crc32"
+	"time"
 )
 
 var (
@@ -12,10 +13,10 @@ var (
 )
 
 const (
-	//KeySize, ValueSize, ExtraSize, crc32 is uint32 type，4 bytes each
-	//Type and Mark are 2 + 2 = 4 bytes
-	//4 + 4 + 4 + 4 + 2 + 2 = 20
-	entryHeaderSize = 20
+	// KeySize, ValueSize, ExtraSize, crc32 is uint32 type，4 bytes each.
+	// Timestamp takes 8 bytes, state takes 2 bytes.
+	// 4 * 4 + 8 + 2 = 26
+	entryHeaderSize = 26
 )
 
 // Value的数据结构类型
@@ -30,10 +31,10 @@ const (
 type (
 	// Entry 数据entry定义
 	Entry struct {
-		Meta  *Meta
-		Type  uint16 // 数据类型
-		Mark  uint16 // 数据操作类型
-		crc32 uint32 // 校验和
+		Meta      *Meta
+		state     uint16
+		crc32     uint32 // 校验和
+		Timestamp uint64
 	}
 
 	Meta struct {
@@ -46,8 +47,9 @@ type (
 	}
 )
 
-func NewEntry(key, value, extra []byte, t, mark uint16) *Entry {
+func newInternal(key, value, extra []byte, state uint16, timestamp uint64) *Entry {
 	return &Entry{
+		state: state, Timestamp: timestamp,
 		Meta: &Meta{
 			Key:       key,
 			Value:     value,
@@ -56,13 +58,26 @@ func NewEntry(key, value, extra []byte, t, mark uint16) *Entry {
 			ValueSize: uint32((len(value))),
 			ExtraSize: uint32(len(extra)),
 		},
-		Type: t,
-		Mark: mark,
 	}
+}
+
+func NewEntry(key, value, extra []byte, t, mark uint16) *Entry {
+	var state uint16 = 0
+	state = state | (t << 8)
+	state = state | mark
+	return newInternal(key, value, extra, state, uint64(time.Now().UnixNano()))
 }
 
 func NewEntryNoExtra(key, value []byte, t, mark uint16) *Entry {
 	return NewEntry(key, value, nil, t, mark)
+}
+
+func NewEntryWithExpire(key, value []byte, deadline int64, t, mark uint16) *Entry {
+	var state uint16 = 0
+	state = state | (t << 8)
+	state = state | mark
+
+	return newInternal(key, value, nil, state, uint64(deadline))
 }
 
 func (this *Entry) Size() uint32 {
@@ -81,9 +96,9 @@ func (this *Entry) Encode() ([]byte, error) {
 
 	binary.BigEndian.PutUint32(buf[4:8], ks)
 	binary.BigEndian.PutUint32(buf[8:12], vs)
-	binary.BigEndian.PutUint32(buf[12:18], es)
-	binary.BigEndian.PutUint16(buf[16:18], this.Type)
-	binary.BigEndian.PutUint16(buf[18:20], this.Mark)
+	binary.BigEndian.PutUint32(buf[12:16], es)
+	binary.BigEndian.PutUint16(buf[16:18], this.state)
+	binary.BigEndian.PutUint64(buf[18:26], this.Timestamp)
 	copy(buf[entryHeaderSize:entryHeaderSize+ks], this.Meta.Key)
 	copy(buf[entryHeaderSize+ks:(entryHeaderSize+ks+vs)], this.Meta.Value)
 
@@ -102,8 +117,8 @@ func Decode(buf []byte) (*Entry, error) {
 	ks := binary.BigEndian.Uint32(buf[4:8])
 	vs := binary.BigEndian.Uint32(buf[8:12])
 	es := binary.BigEndian.Uint32(buf[12:16])
-	t := binary.BigEndian.Uint16(buf[16:18])
-	mark := binary.BigEndian.Uint16(buf[18:20])
+	state := binary.BigEndian.Uint16(buf[16:18])
+	timestamp := binary.BigEndian.Uint64(buf[18:26])
 	crc := binary.BigEndian.Uint32(buf[0:4])
 
 	return &Entry{
@@ -112,8 +127,16 @@ func Decode(buf []byte) (*Entry, error) {
 			ValueSize: vs,
 			ExtraSize: es,
 		},
-		Type:  t,
-		Mark:  mark,
-		crc32: crc,
+		state:     state,
+		crc32:     crc,
+		Timestamp: timestamp,
 	}, nil
+}
+
+func (e *Entry) GetType() uint16 {
+	return e.state >> 8
+}
+
+func (e *Entry) GetMark() uint16 {
+	return e.state & (2<<7 - 1)
 }

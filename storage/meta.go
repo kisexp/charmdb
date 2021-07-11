@@ -8,7 +8,8 @@ import (
 
 // DBMeta 保存数据库的一些额外信息
 type DBMeta struct {
-	ActiveWriteOff map[uint16]int64 `json:"active_write_off"` // 当前数据文件的写偏移
+	ActiveWriteOff   map[uint16]int64 `json:"active_write_off"` // 当前数据文件的写偏移
+	ReclaimableSpace map[uint32]int64 `json:"reclaimable_space"`
 }
 
 // LoadMeta 加载数据信息
