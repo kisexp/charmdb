@@ -5,7 +5,7 @@ addr = "127.0.0.1:5200"
 # 数据库文件路径
 # Default charmdb data dir: /tmp/charmdb_server.
 # Do not use the default path before you use it in production.
-dir_path = "/Users/huliangliang/Documents/data/go/src/charmdb-server"
+dir_path = "/opt/server/charmdb/charmdb-server"
 
 # 默认数据文件大小16MB
 # Default db file size: 16MB.

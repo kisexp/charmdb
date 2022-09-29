@@ -1,4 +1,5 @@
-module charmdb
+module github.com/kisexp/charmdb
+
 
 go 1.16
 
