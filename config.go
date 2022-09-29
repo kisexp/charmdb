@@ -1,6 +1,6 @@
 package charmdb
 
-import "charmdb/storage"
+import "github.com/kisexp/charmdb/storage"
 
 // DataIndexMode 数据索引的模式
 type DataIndexMode int

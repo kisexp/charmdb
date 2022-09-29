@@ -2,12 +2,12 @@ package charmdb
 
 import (
 	"bytes"
-	"charmdb/index"
-	"charmdb/storage"
-	"charmdb/utils"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/kisexp/charmdb/index"
+	"github.com/kisexp/charmdb/storage"
+	"github.com/kisexp/charmdb/utils"
 	"io"
 	"io/ioutil"
 	"log"

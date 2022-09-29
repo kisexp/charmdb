@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"charmdb"
+	"github.com/kisexp/charmdb"
 	"github.com/tidwall/redcon"
 )
 

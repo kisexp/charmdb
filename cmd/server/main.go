@@ -1,9 +1,9 @@
 package main
 
 import (
-	"charmdb"
-	"charmdb/cmd"
 	"flag"
+	"github.com/kisexp/charmdb"
+	"github.com/kisexp/charmdb/cmd"
 	"github.com/pelletier/go-toml"
 	"io/ioutil"
 	"log"

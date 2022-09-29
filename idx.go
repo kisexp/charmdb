@@ -1,10 +1,10 @@
 package charmdb
 
 import (
-	"charmdb/data/list"
-	"charmdb/index"
-	"charmdb/storage"
-	"charmdb/utils"
+	"github.com/kisexp/charmdb/data/list"
+	"github.com/kisexp/charmdb/index"
+	"github.com/kisexp/charmdb/storage"
+	"github.com/kisexp/charmdb/utils"
 	"io"
 	"log"
 	"sort"

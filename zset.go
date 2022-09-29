@@ -1,9 +1,9 @@
 package charmdb
 
 import (
-	"charmdb/data/zset"
-	"charmdb/storage"
-	"charmdb/utils"
+	"github.com/kisexp/charmdb/data/zset"
+	"github.com/kisexp/charmdb/storage"
+	"github.com/kisexp/charmdb/utils"
 	"math"
 	"sync"
 	"time"

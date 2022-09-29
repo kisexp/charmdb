@@ -1,6 +1,6 @@
 package index
 
-import "charmdb/storage"
+import "github.com/kisexp/charmdb/storage"
 
 // Index 数据索引定义
 type Index struct {

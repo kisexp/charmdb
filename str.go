@@ -2,8 +2,8 @@ package charmdb
 
 import (
 	"bytes"
-	"charmdb/index"
-	"charmdb/storage"
+	"github.com/kisexp/charmdb/index"
+	"github.com/kisexp/charmdb/storage"
 	"strings"
 	"sync"
 	"time"

@@ -2,8 +2,8 @@ package charmdb
 
 import (
 	"bytes"
-	"charmdb/data/list"
-	"charmdb/storage"
+	"github.com/kisexp/charmdb/data/list"
+	"github.com/kisexp/charmdb/storage"
 	"strconv"
 	"strings"
 	"sync"

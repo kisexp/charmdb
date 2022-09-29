@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"charmdb"
-	"charmdb/data/list"
+	"github.com/kisexp/charmdb"
+	"github.com/kisexp/charmdb/data/list"
 	"github.com/tidwall/redcon"
 	"strconv"
 )
