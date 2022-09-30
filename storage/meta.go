@@ -14,7 +14,7 @@ type DBMeta struct {
 
 // LoadMeta 加载数据信息
 func LoadMeta(path string) (m *DBMeta) {
-	m = &DBMeta{ActiveWriteOff: make(map[uint16]int64)}
+	m = &DBMeta{ActiveWriteOff: make(map[uint16]int64), ReclaimableSpace: make(map[uint32]int64)}
 
 	file, err := os.OpenFile(path, os.O_RDONLY, 0600)
 	if err != nil {

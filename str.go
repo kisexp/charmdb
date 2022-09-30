@@ -266,7 +266,12 @@ func (this *CharmDB) incrReclaimableSpace(key []byte) {
 		index := oldIdx.Value().(*index.Index)
 		if index != nil {
 			space := int64(index.EntrySize)
-			this.meta.ReclaimableSpace[index.FileId] += space
+			_, ok := this.meta.ReclaimableSpace[index.FileId]
+			if ok {
+				this.meta.ReclaimableSpace[index.FileId] += space
+			} else {
+				this.meta.ReclaimableSpace[index.FileId] = space
+			}
 		}
 	}
 }
